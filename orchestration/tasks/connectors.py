@@ -11,9 +11,22 @@ import httpx
 import pandas as pd
 from prefect import task, get_run_logger
 from prefect.blocks.system import Secret
-import pdfplumber
-import spacy
-from bs4 import BeautifulSoup
+try:
+    import pdfplumber
+except ImportError:
+    pdfplumber = None
+
+try:
+    import spacy
+except ImportError:
+    spacy = None
+
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
+
+import io
 
 
 @task(retries=3, retry_delay_seconds=60)
@@ -414,11 +427,15 @@ async def process_pdf_documents(
     logger = get_run_logger()
     
     # Load spaCy model for text processing
-    try:
-        nlp = spacy.load("en_core_web_sm")
-    except OSError:
-        logger.warning("spaCy model not found, using simple text processing")
-        nlp = None
+    nlp = None
+    if spacy is not None:
+        try:
+            nlp = spacy.load("en_core_web_sm")
+        except OSError:
+            logger.warning("spaCy model not found, using simple text processing")
+            nlp = None
+    else:
+        logger.warning("spaCy not installed, using simple text processing")
     
     processed_docs = []
     
@@ -432,6 +449,10 @@ async def process_pdf_documents(
                 response.raise_for_status()
                 
                 # Process PDF with pdfplumber
+                if pdfplumber is None:
+                    logger.warning("pdfplumber not installed, skipping PDF processing")
+                    continue
+                    
                 with pdfplumber.open(io.BytesIO(response.content)) as pdf:
                     # Extract metadata
                     metadata = {
