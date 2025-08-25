@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: glonav-config
+  namespace: glonav
+data:
+  # Database Configuration
+  DATABASE_URL: "postgresql://postgres:password@postgres:5432/glonav"
+  VECTOR_DB_URL: "postgresql://postgres:password@postgres:5432/glonav_vectors"
+  DUCKDB_PATH: "/data/warehouse/glonav.duckdb"
+  
+  # Neo4j Configuration
+  NEO4J_URI: "bolt://neo4j:7687"
+  NEO4J_USER: "neo4j"
+  
+  # Redis Configuration
+  REDIS_URL: "redis://redis:6379"
+  
+  # LLM Configuration
+  OLLAMA_BASE_URL: "http://ollama:11434"
+  OLLAMA_MODEL: "llama3.1:8b"
+  EMBEDDING_MODEL: "nomic-embed-text"
+  
+  # Prefect Configuration
+  PREFECT_API_URL: "http://prefect-server:4200/api"
+  
+  # Application Configuration
+  ENVIRONMENT: "production"
+  DEBUG: "false"
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  
+  # CORS
+  CORS_ORIGINS: '["https://glonav.example.com"]'
+  
+  # Performance settings
+  MAX_WORKERS: "4"
+  CACHE_TTL: "3600"
+  REQUEST_TIMEOUT: "30"
+  
+  # RAG settings
+  MAX_CONTEXT_LENGTH: "8000"
+  RETRIEVAL_TOP_K: "10"
+  SIMILARITY_THRESHOLD: "0.7"
+  
+  # Monitoring
+  PROMETHEUS_PORT: "9090"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: glonav-config
+  namespace: glonav-staging
+data:
+  # Database Configuration
+  DATABASE_URL: "postgresql://postgres:password@postgres:5432/glonav"
+  VECTOR_DB_URL: "postgresql://postgres:password@postgres:5432/glonav_vectors"
+  DUCKDB_PATH: "/data/warehouse/glonav.duckdb"
+  
+  # Neo4j Configuration
+  NEO4J_URI: "bolt://neo4j:7687"
+  NEO4J_USER: "neo4j"
+  
+  # Redis Configuration
+  REDIS_URL: "redis://redis:6379"
+  
+  # LLM Configuration
+  OLLAMA_BASE_URL: "http://ollama:11434"
+  OLLAMA_MODEL: "llama3.1:8b"
+  EMBEDDING_MODEL: "nomic-embed-text"
+  
+  # Prefect Configuration
+  PREFECT_API_URL: "http://prefect-server:4200/api"
+  
+  # Application Configuration
+  ENVIRONMENT: "staging"
+  DEBUG: "true"
+  LOG_LEVEL: "DEBUG"
+  LOG_FORMAT: "json"
+  
+  # CORS
+  CORS_ORIGINS: '["https://glonav-staging.example.com"]'
+  
+  # Performance settings
+  MAX_WORKERS: "2"
+  CACHE_TTL: "1800"
+  REQUEST_TIMEOUT: "30"
+  
+  # RAG settings
+  MAX_CONTEXT_LENGTH: "8000"
+  RETRIEVAL_TOP_K: "10"
+  SIMILARITY_THRESHOLD: "0.7"
+  
+  # Monitoring
+  PROMETHEUS_PORT: "9090"
